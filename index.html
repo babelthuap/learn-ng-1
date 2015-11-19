@@ -8,10 +8,14 @@
     .red { color: red; }
     .text { white-space: pre-line; }
     .fav { font-weight: bold; }
+    .fav-true { font-weight: bold; }
   </style>
 </head>
 <body>
   <div ng-app="twitterApp">
+    <h1>Dumb Twitter*</h1>
+    <h6>* protected by parody law</h6>
+
     <div ng-controller="tweetForm">
       <textarea cols="30" rows="10" ng-model="tweet.text"></textarea>
       <div ng-class="{ red: invalidTweet() }">{{ charactersLeft() }}</div>
@@ -20,15 +24,16 @@
       <div>
         <div ng-show="tweets.length === 0">No tweets yet!!!</div>
         <ul>
-          <li ng-repeat="x in tweets track by $index">
-            <span class="text"> {{x.text}} </span>
+          <li ng-repeat="(key, val) in tweets" class="fav-{{val.fav}}">
+            <span class="text"> {{val.text}} </span>
             --
-            <span ng-click="deleteTweet($index)">X</span>
-            <span ng-click="favoriteTweet($index)">F</span>
+            <button ng-click="deleteTweet(key)">X</button>
+            <button ng-click="favoriteTweet(key)">F</button>
           </li>
         </ul>
       </div>
     </div>
+
   </div>
   <script src="app.js"></script>
 </body>

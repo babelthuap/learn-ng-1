@@ -5,9 +5,7 @@ angular.module("twitterApp", [])
 .controller("tweetForm", function($scope, VARS) {
   $scope.tweet = {text: ''};
 
-  $scope.tweets = [
-    { text: "Tweet 1", fav: false }, { text: "Tweet 2", fav: true }, { text: "Tweet 3", fav: false }
-  ];
+  $scope.tweets = {};
 
   $scope.invalidTweet = function() {
     return $scope.charactersLeft() < 0 || $scope.tweet.text.length === 0;
@@ -18,11 +16,19 @@ angular.module("twitterApp", [])
   };
 
   $scope.addTweet = function() {
-    $scope.tweets.unshift($scope.tweet);
-    $scope.tweet = {text: ''};
+    $scope.tweets[Date.now()] = $scope.tweet;
+    $scope.tweet = {text: '', fav: false};
   }
 
-  $scope.deleteTweet = function(index) {
-    $scope.tweets.splice(index, 1);
+  $scope.deleteTweet = function(key) {
+    delete $scope.tweets[key];
   }
+
+  $scope.favoriteTweet = function(key) {
+    $scope.tweets[key].fav = !$scope.tweets[key].fav;
+  }
+
+  $scope.$watch('tweet.text', function(newValue, oldValue) {
+    document.body.style.backgroundColor = (newValue == 42) ? 'black' : 'white';
+  })
 });
