@@ -19,12 +19,14 @@
     <div ng-controller="tweetForm">
       <textarea cols="30" rows="10" ng-model="tweet.text"></textarea>
       <div ng-class="{ red: invalidTweet() }">{{ charactersLeft() }}</div>
-      <button ng-disabled="invalidTweet()" ng-click="addTweet()">Tweet</button>
+      <button ng-disabled="invalidTweet()" ng-click="addTweet(tweet)">Tweet</button>
+
+      <input type="text" ng-model="query">
 
       <div>
         <div ng-show="tweets.length === 0">No tweets yet!!!</div>
         <ul>
-          <li ng-repeat="(key, val) in tweets" class="fav-{{val.fav}}">
+          <li ng-repeat="(key, val) in tweetsToDisplay(query)" class="fav-{{val.fav}}">
             <span class="text"> {{val.text}} </span>
             --
             <button ng-click="deleteTweet(key)">X</button>
