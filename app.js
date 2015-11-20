@@ -13,82 +13,53 @@ angular.module("twitterApp", [])
     return VARS.LIMIT - $scope.tweet.text.length;
   };
 
+  $scope.addTweet = function() {
+    tweetLog.addTweet($scope.tweet);
+    $scope.tweet = {text: ''};
+    return;
+  }
 
-  $scope.filtered = tweetLog.filtered;
   $scope.tweets = tweetLog.tweets;
+  $scope.noTweets = tweetLog.noTweets;
   $scope.deleteTweet = tweetLog.deleteTweet;
   $scope.favoriteTweet = tweetLog.favoriteTweet;
   $scope.tweetsToDisplay = tweetLog.tweetsToDisplay;
 
-  $scope.addTweet = function() {
-    tweetLog.addTweet($scope.tweet);
-    $scope.tweet = {text: ''};
-  }
-  
-  $scope.$watch('query', function(newValue, oldValue) {
-    $scope.filtered = {};
-    Object.keys($scope.tweets).forEach(function(key){
-      if ($scope.tweets[key].text.match(newValue)) {
-        $scope.filtered[key] = $scope.tweets[key];
-      }
-    })
-  })
-
 })
 .service("tweetLog", function() {
-  this.filtered = this.tweets = {};
+  this.tweets = {};
+
+  this.noTweets = function() {
+    return !Object.keys(this.tweets).length;
+  }
 
   this.addTweet = function(tweet) {
     this.tweets[Date.now()] = tweet;
-  }
+    return;
+  };
 
   this.deleteTweet = function(key) {
     delete this.tweets[key];
-  }
+    return;
+  };
 
   this.favoriteTweet = function(key) {
     this.tweets[key].fav = !this.tweets[key].fav;
-  }
+    return;
+  };
 
   this.tweetsToDisplay = function(query) {
-    return query ? this.filtered : this.tweets;
-  }
+    if (!query) return this.tweets;
 
+    var filtered = {};
+    var tweets = this.tweets;
+    Object.keys(tweets).forEach(function(key) {
+      if (tweets[key].text.match(query)) {
+        filtered[key] = tweets[key];
+      }
+    });
+
+    return filtered;
+  };
 
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

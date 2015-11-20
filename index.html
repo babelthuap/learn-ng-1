@@ -24,7 +24,7 @@
       <input type="text" ng-model="query">
 
       <div>
-        <div ng-show="tweets.length === 0">No tweets yet!!!</div>
+        <div ng-show="noTweets()">No tweets yet!!!</div>
         <ul>
           <li ng-repeat="(key, val) in tweetsToDisplay(query)" class="fav-{{val.fav}}">
             <span class="text"> {{val.text}} </span>
