@@ -7,7 +7,6 @@
   <style>
     .red { color: red; }
     .text { white-space: pre-line; }
-    .fav { font-weight: bold; }
     .fav-true { font-weight: bold; }
   </style>
 </head>
@@ -20,11 +19,14 @@
       <textarea cols="30" rows="10" ng-model="tweet.text"></textarea>
       <div ng-class="{ red: invalidTweet() }">{{ charactersLeft() }}</div>
       <button ng-disabled="invalidTweet()" ng-click="addTweet(tweet)">Tweet</button>
+      
+      <hr>
 
+      <label for="input">Filter:</label>
       <input type="text" ng-model="query">
 
       <div>
-        <div ng-show="noTweets()">No tweets yet!!!</div>
+        <p ng-show="noTweets()">No tweets yet!!!</p>
         <ul>
           <li ng-repeat="(key, val) in tweetsToDisplay(query)" class="fav-{{val.fav}}">
             <span class="text"> {{val.text}} </span>

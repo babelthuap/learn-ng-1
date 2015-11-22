@@ -1,32 +1,34 @@
+'use strict';
+
 angular.module("twitterApp", [])
 .constant("VARS", {
   LIMIT: 42
 })
-.controller("tweetForm", function($scope, VARS, tweetLog) {
+.controller("tweetForm", function($scope, VARS, tweetLogSvc) {
+  // handle everything to do with the tweet input directly
+
   $scope.tweet = {text: ''};
 
-  $scope.invalidTweet = function() {
-    return $scope.charactersLeft() < 0 || $scope.tweet.text.length === 0;
-  }
+  $scope.invalidTweet = () => $scope.charactersLeft() < 0 ||
+                              $scope.tweet.text.length === 0;
 
-  $scope.charactersLeft = function() {
-    return VARS.LIMIT - $scope.tweet.text.length;
-  };
+  $scope.charactersLeft = () => VARS.LIMIT - $scope.tweet.text.length;
 
-  $scope.addTweet = function() {
-    tweetLog.addTweet($scope.tweet);
+  $scope.addTweet = () => {
+    tweetLogSvc.addTweet($scope.tweet);
     $scope.tweet = {text: ''};
     return;
   }
 
-  $scope.tweets = tweetLog.tweets;
-  $scope.noTweets = tweetLog.noTweets;
-  $scope.deleteTweet = tweetLog.deleteTweet;
-  $scope.favoriteTweet = tweetLog.favoriteTweet;
-  $scope.tweetsToDisplay = tweetLog.tweetsToDisplay;
-
+  $scope.tweets = tweetLogSvc.tweets;
+  $scope.noTweets = tweetLogSvc.noTweets;
+  $scope.deleteTweet = tweetLogSvc.deleteTweet;
+  $scope.favoriteTweet = tweetLogSvc.favoriteTweet;
+  $scope.tweetsToDisplay = tweetLogSvc.tweetsToDisplay;
 })
-.service("tweetLog", function() {
+.service("tweetLogSvc", function() {
+  // handle the list of tweets
+
   this.tweets = {};
 
   this.noTweets = function() {
@@ -54,12 +56,11 @@ angular.module("twitterApp", [])
     var filtered = {};
     var tweets = this.tweets;
     Object.keys(tweets).forEach(function(key) {
-      if (tweets[key].text.match(query)) {
+      if (tweets[key].text.indexOf(query) !== -1) {
         filtered[key] = tweets[key];
       }
     });
 
     return filtered;
   };
-
 })
